@@ -1,6 +1,8 @@
 package io.github.mstehula.fpg;
 
 import io.github.mstehula.fpg.UI.UI;
+import io.github.mstehula.fpg.UI.input.Keyboard;
+import io.github.mstehula.fpg.UI.input.Mouse;
 
 import java.awt.*;
 
@@ -22,6 +24,12 @@ public class Main {
 
     private static UI ui = new UI();
     public static UI getUI() { return ui; }
+
+    private static Mouse mouse = new Mouse();
+    public static Mouse getMouse() { return mouse; }
+
+    private static Keyboard keyboard = new Keyboard();
+    public static Keyboard getKeyboard() { return keyboard; }
 
     public static void main(String args[]) {
         setGame(new Game());

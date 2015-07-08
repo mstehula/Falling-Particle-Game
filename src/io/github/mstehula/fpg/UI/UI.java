@@ -19,6 +19,10 @@ public class UI {
 
         this.canvas = new Canvas();
         this.canvas.setSize(Main.getDefaultDimension());
+        this.canvas.addMouseListener(Main.getMouse());
+        this.canvas.addMouseMotionListener(Main.getMouse());
+        this.canvas.addKeyListener(Main.getKeyboard());
+        this.canvas.setBackground(Color.blue);
         this.window.add(this.canvas);
 
         this.window.pack();
@@ -28,5 +32,9 @@ public class UI {
     public void shutdown() {
         this.window.setVisible(false);
         this.window.dispose();
+    }
+
+    public Graphics getGraphics() {
+        return this.canvas.getGraphics();
     }
 }

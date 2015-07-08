@@ -1,5 +1,7 @@
 package io.github.mstehula.fpg.particles;
 
+import io.github.mstehula.fpg.particles.mechanics.PVector;
+
 import java.awt.*;
 
 /**
@@ -7,20 +9,21 @@ import java.awt.*;
  */
 public class Particle {
 
-    private int x;
-    private int y;
+    PVector location;
 
-    private int width;
-    private int height;
+    int width = 4;
+    int height = 4;
 
     public Particle() {
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
+        location = new PVector(0, 0);
+    }
+
+    public Particle(int x, int y) {
+        location = new PVector(x, y);
     }
 
     public void render(Graphics g) {
-        g.fillOval(x - width/2, y - height/2, width, height);
+        g.setColor(new Color(0x00ff00));
+        g.fillOval(location.getX() - width/2, location.getY() - height/2, width, height);
     }
 }

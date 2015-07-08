@@ -1,11 +1,17 @@
 package io.github.mstehula.fpg;
 
+import io.github.mstehula.fpg.particles.Particle;
+
+import java.util.LinkedList;
+
 /**
  * Created by MStehula on 7/8/2015.
  */
 public class Game {
 
     private boolean isRunning = true;
+
+    private LinkedList<Particle> particles = new LinkedList<Particle>();
 
     public void startup() {
         Main.getUI().startup();
@@ -17,7 +23,7 @@ public class Game {
         long secondTime = currentTime;
         int tickCount = 0;
         int renderCount = 0;
-        while(isRunning) {
+        while(this.isRunning) {
             currentTime = System.nanoTime();
             if((currentTime - tickTime) > (1000000000/20)) {
                 tickCount++;
@@ -40,7 +46,11 @@ public class Game {
     }
 
     private void render() {
-
+        synchronized (this.particles) {
+            for (Particle particle : this.particles) {
+                particle.render(Main.getUI().getGraphics());
+            }
+        }
     }
 
     public void shutdown() {
@@ -48,7 +58,14 @@ public class Game {
     }
 
     public void stopLoop() {
-        isRunning = false;
+        this.isRunning = false;
+    }
+
+    public void spawnParticle(int x, int y) {
+        synchronized (this.particles) {
+            this.particles.addLast(new Particle(x, y));
+        }
+        System.out.println("Particle spawned at " + x + ", " + y);
     }
 
 }
