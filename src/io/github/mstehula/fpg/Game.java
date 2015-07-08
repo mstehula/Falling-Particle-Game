@@ -2,6 +2,7 @@ package io.github.mstehula.fpg;
 
 import io.github.mstehula.fpg.particles.Particle;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -33,7 +34,7 @@ public class Game {
             renderCount++;
             render();
             if((currentTime - secondTime) > 1000000000) {
-                System.out.println("TPS: " + tickCount + ", FPS: " + renderCount);
+                System.out.println("TPS: " + tickCount + ", FPS: " + renderCount + " : Current List size: " + particles.size());
                 tickCount = 0;
                 renderCount = 0;
                 secondTime = currentTime;
@@ -42,14 +43,25 @@ public class Game {
     }
 
     private void tick() {
-
+        if(Main.getMouse().isButtonDown() && Main.getMouse().getButton() == 1) {
+            this.particles.addLast(new Particle(Main.getMouse().getX(), Main.getMouse().getY()));
+        }
+        if(Main.getMouse().isButtonDown() && Main.getMouse().getButton() == 2) {
+            Main.getUI().getGraphics().clearRect(0,0, Main.getDefaultDimension().width, Main.getDefaultDimension().height);
+            this.particles.clear();
+        }
+        for(Iterator<Particle> iterator = particles.iterator(); iterator.hasNext(); ) {
+            Particle particle = iterator.next();
+            particle.tick();
+            if(particle.isOffscreen()) {
+                iterator.remove();
+            }
+        }
     }
 
     private void render() {
-        synchronized (this.particles) {
-            for (Particle particle : this.particles) {
-                particle.render(Main.getUI().getGraphics());
-            }
+        for (Particle particle : this.particles) {
+            particle.render(Main.getUI().getGraphics());
         }
     }
 
@@ -59,13 +71,6 @@ public class Game {
 
     public void stopLoop() {
         this.isRunning = false;
-    }
-
-    public void spawnParticle(int x, int y) {
-        synchronized (this.particles) {
-            this.particles.addLast(new Particle(x, y));
-        }
-        System.out.println("Particle spawned at " + x + ", " + y);
     }
 
 }
